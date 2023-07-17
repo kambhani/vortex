@@ -5,8 +5,10 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import { ThemeProvider } from "~/components/theme-provider";
 import dynamic from "next/dynamic";
+import Script from "next/script";
 
 const Navbar = dynamic(import("~/components/navbar"), {ssr: false});
+const Footer = dynamic(import("~/components/footer"), {ssr: false});
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -16,7 +18,10 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <Navbar></Navbar>
-        <Component {...pageProps} />
+        <div className="flex flex-grow flex-col bg-slate-50 dark:bg-slate-950">
+          <Component {...pageProps} />
+        </div>
+        <Footer></Footer>
       </ThemeProvider>
     </SessionProvider>
   );
