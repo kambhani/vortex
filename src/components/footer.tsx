@@ -9,7 +9,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { type NavbarLink } from "~/utils/types";
 import { signIn, signOut, useSession } from "next-auth/react";
 
-export default function Navbar() {
+export default function Footer() {
   const { resolvedTheme, setTheme } = useTheme();
   const { data: sessionData } = useSession();
   

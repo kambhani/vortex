@@ -1,10 +1,14 @@
-import { signIn, signOut, useSession } from "next-auth/react";
 import { getServerAuthSession } from "~/server/auth";
 import { type GetServerSideProps } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import { api } from "~/utils/api";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
+import { useRouter } from "next/router";
+import { useToast } from "~/components/ui/use-toast";
+import { ToastAction } from "~/components/ui/toast";
+import { useEffect } from "react";
+import dynamic from "next/dynamic";
+
+const Providers = dynamic(import("~/components/providers"), {ssr: false});
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getServerAuthSession(ctx);
@@ -24,6 +28,24 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 };
 
 export default function Login() {
+  const router = useRouter();
+  const { error } = useRouter().query;
+  const { toast } = useToast();
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (typeof error !== 'undefined') {
+        toast({
+          variant: "destructive",
+          title: "Authentication failed",
+          description: "Please try again after some time",
+          action: <ToastAction altText="I understand">I understand</ToastAction>
+        });
+        router.replace("/login");
+      }
+    }, 0);
+  }, []);
+
   return (
     <>
       <Head>
@@ -38,16 +60,7 @@ export default function Login() {
               <CardDescription>Select a provider below to log in</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col px-2 gap-y-4">
-                <button className="bg-[#5865F2] hover:bg-[#5865F2]/80 w-full inline-flex items-center p-2 sm:p-2 sm rounded-xl justify-center transition duration-200 ease-in-out" onClick={() => signIn("discord")}>
-                  <img className="w-8 h-8 mr-4" src="/icons/discord-mark-white.svg" alt="Discord logo"/>
-                  <span className="font-semibold text-white">Log in with Discord</span>
-                </button>
-                <button className="bg-white hover:bg-slate-100 w-full inline-flex items-center p-2 sm:p-2 rounded-xl justify-center transition duration-200 ease-in-out border border-slate-500" onClick={() => signIn("google")}>
-                  <img className="w-8 h-8 mr-4" src="/icons/google-g-logo.svg" alt="Google logo"/>
-                  <span className="font-semibold text-slate-950">Log in with Google</span>
-                </button>
-              </div>
+              <Providers />
             </CardContent>
             <CardFooter>
               <span className="text-sm text-slate-500 dark:text-slate-400">By logging in, you are agreeing to Vortex's Terms of Service and Privacy Policy.</span>
