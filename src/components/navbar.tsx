@@ -8,7 +8,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { useSession } from "next-auth/react";
 import { Separator } from "~/components/ui/separator";
 import { Fragment } from "react";
-import { links } from "~/utils/constants";
+import { navbarLinks } from "~/utils/constants";
 
 export default function Navbar() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -16,7 +16,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="w-full bg-slate-50 dark:bg-slate-950 py-2 md:py-4 text-slate-950 dark:text-slate-50 flex items-center px-2 sm:px-4 justify-between grow-0 shrink-0">
+      <div className="w-full bg-slate-100 dark:bg-slate-950 py-2 md:py-4 text-slate-950 dark:text-slate-50 flex items-center px-2 sm:px-4 justify-between grow-0 shrink-0">
         <span className="inline-flex items-center md:hidden">
           <Sheet>
             <SheetTrigger asChild>
@@ -35,8 +35,8 @@ export default function Navbar() {
               </SheetHeader>
               <div className="w-full mt-8"></div>
               {
-                links.map(link => (
-                  <div className="px-4 sm:px-8 py-4 hover:bg-slate-200/70 dark:hover:bg-slate-800/70 rounded-2xl transition duration-300 ease-in-out" key={link.key}>
+                navbarLinks.map(link => (
+                  <div className="px-4 sm:px-8 py-4 hover:bg-slate-200/70 dark:hover:bg-slate-800/70 rounded-2xl transition duration-300 ease-in-out" key={link.name}>
                     <Link
                       href={link.href}
                     >
@@ -61,11 +61,11 @@ export default function Navbar() {
           <div className="hidden md:inline-flex items-center">
             <span className="w-4"></span>
             {
-              links.map(link => (
-                <Fragment key={link.key}>
+              navbarLinks.map(link => (
+                <Fragment key={link.name}>
                   <span className="w-4"></span>
                   <Link
-                    className="text-slate-800 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-300/70 font-bold text-xl transition duration-200 ease-in-out"
+                    className="text-slate-800 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-600 font-bold text-xl transition duration-200 ease-in-out"
                     href={link.href}
                   >
                     {link.name}

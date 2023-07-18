@@ -1,4 +1,4 @@
-import { type NavbarLink } from "~/utils/types";
+import * as TYPES from "~/utils/types";
 
 // The list of OAuth providers currently supported
 export const providers = {
@@ -45,29 +45,45 @@ export const providers = {
 };
 
 // The list of links in the navbar
-export const links: NavbarLink[] = [
+export const navbarLinks: TYPES.NavbarLink[] = [
   {
-    key: 0,
     name: "Problems",
     description: "The complete collection of problems available. Try one, if you so dare.",
     href: "/problems"
   },
   {
-    key: 1,
     name: "Contests",
     description: "Looking to prove yourself in real-time? Look no further.",
     href: "/contests"
   },
   {
-    key: 2,
     name: "Leaderboards",
     description: "View the best of the best. Don't expect to see your name on it though.",
     href: "/leaderboards"
   },
   {
-    key: 3,
     name: "Blog",
     description: "A look into the minds of the creators. A vauable journey, or so I'm told.",
     href: "/blog"
+  }
+];
+
+// The list of links in the footer
+export const footerLinks: TYPES.FooterLink[] = [
+  {
+    name: "About",
+    href: "/about"
+  },
+  {
+    name: "Terms of Service",
+    href: "/terms"
+  },
+  {
+    name: "Privacy Policy",
+    href: "/privacy"
+  },
+  {
+    name: "Feedback",
+    href: "/feedback"
   }
 ];

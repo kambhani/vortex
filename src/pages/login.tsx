@@ -52,7 +52,7 @@ export default function Login() {
         <title>Login to your Vortex Account</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex justify-center items-center align-middle h-full">
+      <main className="flex justify-center items-center align-middle h-full my-16">
         <div className="w-4/5 md:w-3/5 xl:w-1/2">
           <Card className="bg-gradient-to-br from-slate-100/70 to-slate-300/70 dark:from-slate-800/70 dark:to-slate-900/70">
             <CardHeader>
