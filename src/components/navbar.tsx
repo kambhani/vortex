@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { MoonIcon, SunIcon, HamburgerMenuIcon } from "@radix-ui/react-icons"
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -6,41 +5,14 @@ import { Button } from "~/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~/components/ui/hover-card";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "~/components/ui/sheet";
-import { type NavbarLink } from "~/utils/types";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Separator } from "~/components/ui/separator";
 import { Fragment } from "react";
+import { links } from "~/utils/constants";
 
 export default function Navbar() {
   const { resolvedTheme, setTheme } = useTheme();
   const { data: sessionData } = useSession();
-  
-  const links: NavbarLink[] = [
-    {
-      key: 0,
-      name: "Problems",
-      description: "The complete collection of problems available. Try one, if you so dare.",
-      href: "/problems"
-    },
-    {
-      key: 1,
-      name: "Contests",
-      description: "Looking to prove yourself in real-time? Look no further.",
-      href: "/contests"
-    },
-    {
-      key: 2,
-      name: "Leaderboards",
-      description: "View the best of the best. Don't expect to see your name on it though.",
-      href: "/leaderboards"
-    },
-    {
-      key: 3,
-      name: "Blog",
-      description: "A look into the minds of the creators. A vauable journey, or so I'm told.",
-      href: "/blog"
-    }
-  ];
 
   return (
     <>
