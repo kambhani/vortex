@@ -16,7 +16,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="w-full bg-slate-100 dark:bg-slate-950 py-2 md:py-4 text-slate-950 dark:text-slate-50 flex items-center px-2 sm:px-4 justify-between grow-0 shrink-0">
+      <div className="w-full bg-slate-100 dark:bg-slate-950 py-4 text-slate-950 dark:text-slate-50 flex items-center px-2 sm:px-4 justify-between grow-0 shrink-0">
         <span className="inline-flex items-center md:hidden">
           <Sheet>
             <SheetTrigger asChild>
@@ -88,8 +88,18 @@ export default function Navbar() {
               <Link href={sessionData ? `/user/${sessionData?.user?.id}` : "/login"}>
                 <Button variant="secondary" size="icon" tabIndex={-1}>
                   <Avatar>
-                    <AvatarImage src={sessionData?.user?.image || "Image Not Found"} alt="User profile image"/>
-                    <AvatarFallback>{sessionData?.user?.name?.substring(0, 2).toUpperCase() || <PersonIcon />}</AvatarFallback>
+                    {
+                      sessionData?.user?.image ?
+                      
+                      <>
+                        <AvatarImage src={sessionData?.user?.image || "Image Not Found"} alt="User profile image"/>
+                        <AvatarFallback>{sessionData?.user?.name?.substring(0, 2).toUpperCase() || <PersonIcon />}</AvatarFallback>
+                      </>
+
+                      :
+
+                      <AvatarFallback>{sessionData?.user?.name?.substring(0, 2).toUpperCase() || <PersonIcon />}</AvatarFallback>
+                    }
                   </Avatar>
                 </Button>
               </Link>

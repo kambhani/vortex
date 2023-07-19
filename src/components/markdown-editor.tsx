@@ -20,13 +20,14 @@ export default function MarkdownEditor({value, setValue}: {value: string, setVal
   }, []);
 
   return (
-    <div id="react-markdown-editor" data-color-mode={resolvedTheme}>
+    <div id="react-markdown-editor" className="w-full md:px-4 mb-24" data-color-mode={resolvedTheme}>
       <MDEditor
         value={value}
         onChange={(newValue) => setValue(newValue ?? value)}
         previewOptions={{
           rehypePlugins: [[rehypeSanitize, rehypeKatex]]
         }}
+        height={500}
       />
     </div>
   )
