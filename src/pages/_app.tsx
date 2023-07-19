@@ -19,7 +19,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <Navbar></Navbar>
-        <div className="flex flex-grow flex-col bg-slate-50 dark:bg-slate-950">
+        <div className="flex flex-grow flex-col bg-slate-50 dark:bg-black">
           <Component {...pageProps} />
         </div>
         <Footer></Footer>

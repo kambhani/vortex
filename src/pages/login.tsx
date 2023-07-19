@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 export default function Login() {
   const router = useRouter();
-  const { error } = useRouter().query;
+  const { error, notAuthorized } = useRouter().query;
   const { toast } = useToast();
 
   useEffect(() => {
@@ -43,6 +43,15 @@ export default function Login() {
         });
         router.replace("/login");
       }
+      if (typeof notAuthorized !== 'undefined' && notAuthorized === "true") {
+        toast({
+          variant: "destructive",
+          title: "Not Authorized",
+          description: "You are not authorized to access the requested resource.",
+          action: <ToastAction altText="I understand">I understand</ToastAction>
+        });
+      }
+      router.replace("/login");
     }, 0);
   }, []);
 
@@ -54,7 +63,7 @@ export default function Login() {
       </Head>
       <main className="flex justify-center items-center align-middle h-full my-16">
         <div className="w-4/5 md:w-3/5 xl:w-1/2">
-          <Card className="bg-gradient-to-br from-slate-100/70 to-slate-300/70 dark:from-slate-800/70 dark:to-slate-900/70">
+          <Card className="bg-slate-200/50 dark:bg-slate-900">
             <CardHeader>
               <CardTitle>Log In</CardTitle>
               <CardDescription>Select a provider below to log in</CardDescription>

@@ -1,4 +1,4 @@
-import { MoonIcon, SunIcon, HamburgerMenuIcon } from "@radix-ui/react-icons"
+import { MoonIcon, SunIcon, HamburgerMenuIcon, PersonIcon } from "@radix-ui/react-icons"
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
@@ -88,8 +88,8 @@ export default function Navbar() {
               <Link href={sessionData ? `/user/${sessionData?.user?.id}` : "/login"}>
                 <Button variant="secondary" size="icon" tabIndex={-1}>
                   <Avatar>
-                    <AvatarImage src={sessionData?.user?.image || "image not found"} alt="User profile image"/>
-                    <AvatarFallback>{sessionData?.user?.name?.substring(0, 2).toUpperCase() || "VX"}</AvatarFallback>
+                    <AvatarImage src={sessionData?.user?.image || "Image Not Found"} alt="User profile image"/>
+                    <AvatarFallback>{sessionData?.user?.name?.substring(0, 2).toUpperCase() || <PersonIcon />}</AvatarFallback>
                   </Avatar>
                 </Button>
               </Link>
