@@ -28,6 +28,7 @@
     "@uiw/react-md-editor": "^3.23.3",
     "class-variance-authority": "^0.6.1",
     "clsx": "^2.0.0",
+    "katex": "^0.16.8",
     "next": "^13.4.2",
     "next-auth": "^4.22.1",
     "next-themes": "^0.2.1",
