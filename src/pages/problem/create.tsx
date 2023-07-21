@@ -51,8 +51,8 @@ export default function CreateProblem() {
             <div className="mx-auto mb-12 w-full px-8 text-center text-slate-500 dark:text-slate-500 sm:w-5/6 md:w-3/4 lg:w-1/2">
               Use the markdown editor provided below to write out your problem.
               The editor supports GitHub-style markdown as well as mathmematical
-              expressions through a LaTeX integration. For more information,
-              read
+              expressions through KaTeX, a LaTeX integration. For more
+              information, read
               <Link
                 href="#"
                 className="font-bold text-slate-600 transition duration-200 ease-in-out hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-600"
