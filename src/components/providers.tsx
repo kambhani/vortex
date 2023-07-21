@@ -10,6 +10,7 @@ export default function Providers() {
   const { toast } = useToast();
 
   function attemptLogin(provider: string): void {
+    console.log(provider);
     signIn(provider).catch(() => {
       toast({
         variant: "destructive",

@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { useRouter } from "next/router";
+import Router from "next/router";
 import { useToast } from "~/components/ui/use-toast";
 import { ToastAction } from "~/components/ui/toast";
 import { useEffect } from "react";
@@ -35,11 +35,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 };
 
 export default function Login() {
-  const router = useRouter();
-  const { error, notAuthorized } = useRouter().query;
   const { toast } = useToast();
 
   useEffect(() => {
+    const { error, notAuthorized } = Router.query;
+
     setTimeout(() => {
       if (typeof error !== "undefined") {
         toast({
@@ -50,7 +50,7 @@ export default function Login() {
             <ToastAction altText="I understand">I understand</ToastAction>
           ),
         });
-        router.replace("/login").catch(() => {
+        Router.replace("/login").catch(() => {
           toast({
             variant: "destructive",
             title: "Website Error",
@@ -70,7 +70,7 @@ export default function Login() {
           ),
         });
       }
-      router.replace("/login").catch(() => {
+      Router.replace("/login").catch(() => {
         toast({
           variant: "destructive",
           title: "Website Error",
@@ -82,7 +82,7 @@ export default function Login() {
         });
       });
     }, 0);
-  }, [router, error, notAuthorized, toast]);
+  }, [toast]);
 
   return (
     <>
