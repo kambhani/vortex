@@ -21,12 +21,12 @@ export default function MarkdownEditor({
   const { resolvedTheme } = useTheme();
 
   useEffect(() => {
-    let markdownEditor = document.getElementById("react-markdown-editor");
+    const markdownEditor = document.getElementById("react-markdown-editor");
     if (markdownEditor) {
       markdownEditor.dataset.colorMode =
         resolvedTheme || localStorage.getItem("theme") || "";
     }
-  }, []);
+  }, [resolvedTheme]);
 
   return (
     <div

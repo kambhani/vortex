@@ -82,7 +82,7 @@ export default function Login() {
         });
       });
     }, 0);
-  }, []);
+  }, [router, error, notAuthorized, toast]);
 
   return (
     <>

@@ -5,7 +5,6 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import { ThemeProvider } from "~/components/theme-provider";
 import dynamic from "next/dynamic";
-import Script from "next/script";
 import { Toaster } from "~/components/ui/toaster";
 
 const Navbar = dynamic(import("~/components/navbar"), { ssr: false });

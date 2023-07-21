@@ -1,4 +1,3 @@
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import { Separator } from "~/components/ui/separator";
 import { footerLinks } from "~/utils/constants";
