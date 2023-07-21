@@ -8,8 +8,8 @@ import dynamic from "next/dynamic";
 import Script from "next/script";
 import { Toaster } from "~/components/ui/toaster";
 
-const Navbar = dynamic(import("~/components/navbar"), {ssr: false});
-const Footer = dynamic(import("~/components/footer"), {ssr: false});
+const Navbar = dynamic(import("~/components/navbar"), { ssr: false });
+const Footer = dynamic(import("~/components/footer"), { ssr: false });
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,

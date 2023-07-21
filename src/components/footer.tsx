@@ -4,27 +4,25 @@ import { Separator } from "~/components/ui/separator";
 import { footerLinks } from "~/utils/constants";
 
 export default function Footer() {
-  const { resolvedTheme, setTheme } = useTheme();
-
   return (
     <>
       <Separator />
-      <div className="w-full bg-slate-100 dark:bg-slate-950 py-3 text-slate-950 dark:text-slate-200 px-2 sm:px-4 shrink-0">
-        <div className="w-full grid grid-cols-12 lg:w-3/4 gap-2 mx-auto mb-8">
-          {
-            footerLinks.map((link, index) => (
-              <Link
-                key={link.name}
-                className="text-slate-800 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-600 col-span-12 sm:col-span-6 lg:col-span-3 text-center"
-                href={link.href}
-              >
-                {link.name}
-              </Link>
-            ))
-          }
+      <div className="w-full shrink-0 bg-slate-100 px-2 py-3 text-slate-950 dark:bg-slate-950 dark:text-slate-200 sm:px-4">
+        <div className="mx-auto mb-8 grid w-full grid-cols-12 gap-2 lg:w-3/4">
+          {footerLinks.map((link) => (
+            <Link
+              key={link.name}
+              className="col-span-12 text-center text-slate-800 hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-600 sm:col-span-6 lg:col-span-3"
+              href={link.href}
+            >
+              {link.name}
+            </Link>
+          ))}
         </div>
-        <p className="text-center text-sm mb-4">&#169; {new Date().getFullYear()} Vortex Inc.</p>
+        <p className="mb-4 text-center text-sm">
+          &#169; {new Date().getFullYear()} Vortex Inc.
+        </p>
       </div>
     </>
-  )
+  );
 }

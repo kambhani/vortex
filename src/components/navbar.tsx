@@ -1,10 +1,26 @@
-import { MoonIcon, SunIcon, HamburgerMenuIcon, PersonIcon } from "@radix-ui/react-icons"
+import {
+  MoonIcon,
+  SunIcon,
+  HamburgerMenuIcon,
+  PersonIcon,
+} from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "~/components/ui/hover-card";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "~/components/ui/sheet";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "~/components/ui/hover-card";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "~/components/ui/sheet";
 import { useSession } from "next-auth/react";
 import { Separator } from "~/components/ui/separator";
 import { Fragment } from "react";
@@ -16,7 +32,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="w-full bg-slate-100 dark:bg-slate-950 py-4 text-slate-950 dark:text-slate-50 flex items-center px-2 sm:px-4 justify-between grow-0 shrink-0">
+      <div className="flex w-full shrink-0 grow-0 items-center justify-between bg-slate-100 px-2 py-4 text-slate-950 dark:bg-slate-950 dark:text-slate-50 sm:px-4">
         <span className="inline-flex items-center md:hidden">
           <Sheet>
             <SheetTrigger asChild>
@@ -29,98 +45,118 @@ export default function Navbar() {
                 <SheetTitle>Navigation</SheetTitle>
                 <SheetDescription asChild>
                   <p className="text-left">
-                    Navigation abilities for mobile devices provided. But seriously, do you expect to code on your phone?
+                    Navigation abilities for mobile devices provided. But
+                    seriously, do you expect to code on your phone?
                   </p>
                 </SheetDescription>
               </SheetHeader>
-              <div className="w-full mt-8"></div>
-              {
-                navbarLinks.map(link => (
-                  <div className="px-4 sm:px-8 py-4 hover:bg-slate-200/70 dark:hover:bg-slate-800/70 rounded-2xl transition duration-300 ease-in-out" key={link.name}>
-                    <Link
-                      href={link.href}
-                    >
-                      <div className="text-slate-800 dark:text-slate-200 font-bold">
-                        {link.name}
-                      </div>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">{link.description}</p>
-                    </Link>
-                  </div>   
-                ))
-              }
+              <div className="mt-8 w-full"></div>
+              {navbarLinks.map((link) => (
+                <div
+                  className="rounded-2xl px-4 py-4 transition duration-300 ease-in-out hover:bg-slate-200/70 dark:hover:bg-slate-800/70 sm:px-8"
+                  key={link.name}
+                >
+                  <Link href={link.href}>
+                    <div className="font-bold text-slate-800 dark:text-slate-200">
+                      {link.name}
+                    </div>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                      {link.description}
+                    </p>
+                  </Link>
+                </div>
+              ))}
             </SheetContent>
           </Sheet>
         </span>
         <span className="inline-flex items-center">
           <Link
-            className="text-slate-950 dark:text-slate-200 font-extrabold text-2xl md:text-3xl"
+            className="text-2xl font-extrabold text-slate-950 dark:text-slate-200 md:text-3xl"
             href="/"
           >
             Vortex
           </Link>
-          <div className="hidden md:inline-flex items-center">
+          <div className="hidden items-center md:inline-flex">
             <span className="w-4"></span>
-            {
-              navbarLinks.map(link => (
-                <Fragment key={link.name}>
-                  <span className="w-4"></span>
-                  <Link
-                    className="text-slate-800 dark:text-slate-400 hover:text-sky-600 dark:hover:text-sky-600 font-bold text-xl transition duration-200 ease-in-out"
-                    href={link.href}
-                  >
-                    {link.name}
-                  </Link>
-                </Fragment>
-              ))
-            }
+            {navbarLinks.map((link) => (
+              <Fragment key={link.name}>
+                <span className="w-4"></span>
+                <Link
+                  className="text-xl font-bold text-slate-800 transition duration-200 ease-in-out hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-600"
+                  href={link.href}
+                >
+                  {link.name}
+                </Link>
+              </Fragment>
+            ))}
           </div>
         </span>
         <span className="inline-flex items-center">
-          <Button variant="secondary" size="icon" onClick={resolvedTheme === "light" ? () => setTheme("dark") : () => setTheme("light")}>
-            {
-              resolvedTheme === "light" ? <SunIcon /> : <MoonIcon />
+          <Button
+            variant="secondary"
+            size="icon"
+            onClick={
+              resolvedTheme === "light"
+                ? () => setTheme("dark")
+                : () => setTheme("light")
             }
-            <span className="sr-only">Toggle theme from {resolvedTheme === "light" ? "light" : "dark"} to {resolvedTheme === "light" ? "dark" : "light"}</span>
+          >
+            {resolvedTheme === "light" ? <SunIcon /> : <MoonIcon />}
+            <span className="sr-only">
+              Toggle theme from {resolvedTheme === "light" ? "light" : "dark"}{" "}
+              to {resolvedTheme === "light" ? "dark" : "light"}
+            </span>
           </Button>
           <span className="w-3"></span>
           <HoverCard>
             <HoverCardTrigger asChild>
-              <Link href={sessionData ? `/user/${sessionData?.user?.id}` : "/login"}>
+              <Link
+                href={sessionData ? `/user/${sessionData?.user?.id}` : "/login"}
+              >
                 <Button variant="secondary" size="icon" tabIndex={-1}>
                   <Avatar>
-                    {
-                      sessionData?.user?.image ?
-                      
+                    {sessionData?.user?.image ? (
                       <>
-                        <AvatarImage src={sessionData?.user?.image || "Image Not Found"} alt="User profile image"/>
-                        <AvatarFallback>{sessionData?.user?.name?.substring(0, 2).toUpperCase() || <PersonIcon />}</AvatarFallback>
+                        <AvatarImage
+                          src={sessionData?.user?.image || "Image Not Found"}
+                          alt="User profile image"
+                        />
+                        <AvatarFallback>
+                          {sessionData?.user?.name
+                            ?.substring(0, 2)
+                            .toUpperCase() || <PersonIcon />}
+                        </AvatarFallback>
                       </>
-
-                      :
-
-                      <AvatarFallback>{sessionData?.user?.name?.substring(0, 2).toUpperCase() || <PersonIcon />}</AvatarFallback>
-                    }
+                    ) : (
+                      <AvatarFallback>
+                        {sessionData?.user?.name
+                          ?.substring(0, 2)
+                          .toUpperCase() || <PersonIcon />}
+                      </AvatarFallback>
+                    )}
                   </Avatar>
                 </Button>
               </Link>
             </HoverCardTrigger>
             <HoverCardContent>
-              {
-                sessionData ?
-
+              {sessionData ? (
                 <>
-                  <div className="font-extrabold">{sessionData?.user?.name}</div>
-                  <div className="text-sm text-slate-600 dark:text-slate-400">{sessionData?.user?.email}</div>
-                  <div className="text-sm text-slate-600 dark:text-slate-400">{sessionData?.user?.id}</div>
+                  <div className="font-extrabold">
+                    {sessionData?.user?.name}
+                  </div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400">
+                    {sessionData?.user?.email}
+                  </div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400">
+                    {sessionData?.user?.id}
+                  </div>
                 </>
-
-                :
-
+              ) : (
                 <>
                   <div className="font-extrabold">No Account</div>
                   <div className="text-sm text-slate-600 dark:text-slate-400">
                     <Link
-                      className="text-sky-600 hover:text-sky-700 dark:text-sky-500 dark:hover:text-sky-400 font-semibold"
+                      className="font-semibold text-sky-600 hover:text-sky-700 dark:text-sky-500 dark:hover:text-sky-400"
                       href="/login"
                     >
                       Sign in
@@ -128,12 +164,12 @@ export default function Navbar() {
                     <span> to view account information</span>
                   </div>
                 </>
-              }
+              )}
             </HoverCardContent>
           </HoverCard>
         </span>
       </div>
       <Separator />
     </>
-  )
+  );
 }

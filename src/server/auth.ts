@@ -11,7 +11,6 @@ import GitHubProvider from "next-auth/providers/github";
 import ZoomProvider from "next-auth/providers/zoom";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
-import { providers } from "~/utils/constants";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -41,12 +40,12 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: '/login'
+    signIn: "/login",
   },
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
+    /*async signIn({ user, account, profile, email, credentials }) {
       return true;
-    },
+    },*/
     session: ({ session, user }) => ({
       ...session,
       user: {
@@ -63,16 +62,16 @@ export const authOptions: NextAuthOptions = {
     }),
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
     GitHubProvider({
       clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET
+      clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
     ZoomProvider({
       clientId: env.ZOOM_CLIENT_ID,
-      clientSecret: env.ZOOM_CLIENT_SECRET
-    })
+      clientSecret: env.ZOOM_CLIENT_SECRET,
+    }),
     /**
      * ...add more providers here.
      *
