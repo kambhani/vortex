@@ -87,3 +87,41 @@ export const footerLinks: TYPES.FooterLink[] = [
     href: "/feedback"
   }
 ];
+
+// The default text to display when creating a new problem
+export const defaultProblemText = `# Your Problem Title Here
+
+## Statement
+This is where you describe your coding problem. The editor supports markdown, so you can **bold**, *italicize*, and ~~strikethrough~~ text. [Links](https://www.example.com) and \`inline code support\` are also offered. In case you dare go bolder, we also support the following:
+
+- Lists
+    1. Both unordered,
+    2. And ordered
+- Pretty neat, right!
+
+> Block quotes, for that extra pizzazz
+
+<!-- Comments like this that wont show up -->
+
+\`\`\`
+Code blocks
+\`\`\`
+
+Images, as shown below
+
+
+![image](/favicon.ico)
+
+Math mode (via KaTeX LaTeX), both inline (like $x^2$), and block, like
+$$
+\\int_1^{e}{\\frac{1}{x}}\\,dx
+$$
+
+Sanitized HTML, so your <script>alert("XSS");</script> attacks will go nowhere.
+
+## Input
+This is where you would describe the format of the expected input and output. The use of
+\`\`\`
+code blocks
+\`\`\`
+to detail these is encouraged.`

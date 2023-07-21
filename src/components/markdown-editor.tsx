@@ -23,7 +23,7 @@ export default function MarkdownEditor({value, setValue}: {value: string, setVal
   }, []);
 
   return (
-    <div id="react-markdown-editor" className="w-full sm:px-4 md:px-8 lg:px-12 2xl:px-16 mb-24" data-color-mode={resolvedTheme}>
+    <div id="react-markdown-editor" className="w-full sm:px-4 md:px-8 lg:px-12 2xl:px-16" data-color-mode={resolvedTheme}>
       <MDEditor
         value={value}
         onChange={(newValue) => setValue(newValue ?? value)}
