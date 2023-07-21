@@ -63,7 +63,7 @@ export default function createProblem() {
               setValue={setProblemText}
             />
             <div className="mt-8 mb-20 text-right px-2 sm:px-4 md:px-8 lg:px-12 2xl:px-16">
-              <Button className="font-semibold">Next</Button>
+              <Button className="font-semibold" onClick={() => setFormPosition(2)}>Next</Button>
             </div>
           </>
         }
