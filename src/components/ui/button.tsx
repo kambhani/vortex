@@ -10,13 +10,14 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-slate-900 text-slate-50 shadow hover:bg-slate-900/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90",
+          "bg-slate-900 text-slate-50 shadow hover:bg-slate-900/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90 focus-visible:border-slate-600 dark:focus-visible:border-slate-500",
         destructive:
-          "bg-red-500 text-slate-50 shadow-sm hover:bg-red-500/90 dark:bg-red-900 dark:text-red-50 dark:hover:bg-red-900/90",
+          "bg-red-600 text-slate-50 shadow-sm hover:bg-red-600/90 dark:bg-red-900 dark:text-red-50 dark:hover:bg-red-900/90",
         success:
-          "bg-green-500 text-slate-50 shadow-sm hover:bg-green-500/90 dark:bg-green-900 dark:text-green-50 dark:hover:bg-green-900/90",
+          "bg-green-700 text-slate-50 shadow-sm hover:bg-green-700/90 dark:bg-green-900 dark:text-green-50 dark:hover:bg-green-900/90",
+        cyan: "bg-cyan-600 text-slate-50 shadow-sm hover:bg-cyan-700/90 dark:bg-cyan-900 dark:text-cyan-50 dark:hover:bg-cyan-900/90 focus-visible:border-slate-800 dark:focus-visible:border-slate-200",
         outline:
-          "border border-slate-200 bg-white shadow-sm hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50",
+          "border border-slate-200 bg-white shadow-sm hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50 focus-visible:border-slate-950 dark:focus-visible:border-white",
         secondary:
           "bg-slate-300 text-slate-900 shadow-sm hover:bg-slate-300/70 dark:bg-slate-700 dark:text-slate-50 dark:hover:bg-slate-700/70 focus-visible:border-slate-900 dark:focus-visible:border-slate-50 rounded-lg",
         ghost:

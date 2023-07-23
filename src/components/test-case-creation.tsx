@@ -1,7 +1,16 @@
-import { useState, useEffect, type Dispatch, type SetStateAction } from "react";
+import {
+  useState,
+  useEffect,
+  type Dispatch,
+  type SetStateAction,
+  useRef,
+  type ChangeEvent,
+} from "react";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
 import { ScrollArea } from "~/components/ui/scroll-area";
+import { useToast } from "~/components/ui/use-toast";
+import { ToastAction } from "~/components/ui/toast";
 import { nanoid } from "nanoid";
 
 export default function TestCaseCreation({
@@ -12,6 +21,106 @@ export default function TestCaseCreation({
   setTestCases: Dispatch<SetStateAction<string[][]>>;
 }) {
   const [currentTestCase, setCurrentTestCase] = useState(-1);
+  const { toast } = useToast();
+  const testCasesLength = useRef(testCases.length);
+
+  const addTestCase = () => {
+    setTestCases([...testCases, ["", ""]]);
+    testCasesLength.current++;
+    toast({
+      variant: "success",
+      title: "Test case added!",
+      description: `Test case ${testCasesLength.current} was successfully added`,
+      action: <ToastAction altText="Ok">Ok</ToastAction>,
+    });
+  };
+
+  const saveTestCase = () => {
+    const input = document.getElementById("test-case-input-textarea");
+    const output = document.getElementById("test-case-output-textarea");
+
+    const newTestCases = testCases.map((testCase, index) => {
+      if (index === currentTestCase && input !== null && output !== null) {
+        return [
+          (input as HTMLTextAreaElement).value,
+          (output as HTMLTextAreaElement).value,
+        ];
+      } else {
+        return testCase;
+      }
+    });
+
+    setTestCases(newTestCases);
+
+    toast({
+      variant: "success",
+      title: "Test case edited!",
+      description: `Test case ${currentTestCase + 1} was successfully edited`,
+      action: <ToastAction altText="Ok">Ok</ToastAction>,
+    });
+  };
+
+  const deleteTestCase = (indexToDelete: number) => {
+    setTestCases((testCases) =>
+      testCases.filter((_, index) => index !== indexToDelete)
+    );
+    testCasesLength.current--;
+    toast({
+      variant: "destructive",
+      title: "Test case deleted!",
+      description: `Test case ${indexToDelete + 1} was successfully deleted`,
+      action: <ToastAction altText="Ok">Ok</ToastAction>,
+    });
+  };
+
+  const loadFile = (
+    event: ChangeEvent<HTMLInputElement>,
+    location: "input" | "output"
+  ) => {
+    const readFileContent = (file: File) => {
+      const reader = new FileReader();
+      return new Promise((resolve, reject) => {
+        reader.onload = (event) => resolve(event.target?.result);
+        reader.onerror = (error) => reject(error);
+        reader.readAsText(file);
+      });
+    };
+    try {
+      const files = event.target.files;
+      if (files !== null && files.length > 0) {
+        const file = files[0];
+        if (typeof file !== "undefined") {
+          readFileContent(file)
+            .then((result) => {
+              const textarea =
+                location === "input"
+                  ? document.getElementById("test-case-input-textarea")
+                  : document.getElementById("test-case-output-textarea");
+              if (textarea !== null) {
+                (textarea as HTMLTextAreaElement).value = result as string;
+              } else {
+                throw new Error();
+              }
+            })
+            .catch(() => {
+              throw new Error();
+            });
+        } else {
+          throw new Error();
+        }
+      } else {
+        throw new Error();
+      }
+    } catch {
+      toast({
+        variant: "destructive",
+        title: "File upload failed!",
+        description: `The file could not be uploaded for processing. Please try again.`,
+        action: <ToastAction altText="Ok">Ok</ToastAction>,
+      });
+    }
+    return;
+  };
 
   useEffect(() => {
     if (currentTestCase > -1 && currentTestCase < testCases.length) {
@@ -26,8 +135,24 @@ export default function TestCaseCreation({
         (output as HTMLTextAreaElement).value =
           testCases[currentTestCase]?.[1] || "";
       }
+    } else {
+      const input = document.getElementById(
+        "test-case-input-textarea-disabled"
+      );
+      const output = document.getElementById(
+        "test-case-output-textarea-disabled"
+      );
+
+      if (input !== null) {
+        (input as HTMLTextAreaElement).value =
+          "Select a test case to edit its value";
+      }
+      if (output !== null) {
+        (output as HTMLTextAreaElement).value =
+          "Select a test case to edit its value";
+      }
     }
-  }, [currentTestCase, testCases, testCases.length]);
+  }, [currentTestCase, testCases]);
 
   return (
     <div className="grid w-full grid-cols-12 px-2 sm:px-4 md:px-8 lg:px-12 2xl:px-16">
@@ -41,11 +166,29 @@ export default function TestCaseCreation({
               >
                 <h3 className="text-lg font-bold">Test case {index + 1}</h3>
                 <div className="flex space-x-2">
-                  <Button variant="destructive" className="w-16 font-semibold">
-                    Delete
-                  </Button>
                   {currentTestCase === index ? (
-                    <Button variant="success" className="w-16 font-semibold">
+                    <Button
+                      variant="destructive"
+                      className="w-16 font-semibold"
+                      onClick={() => setCurrentTestCase(-1)}
+                    >
+                      Cancel
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="destructive"
+                      className="w-16 font-semibold"
+                      onClick={() => deleteTestCase(index)}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                  {currentTestCase === index ? (
+                    <Button
+                      variant="success"
+                      className="w-16 font-semibold"
+                      onClick={() => saveTestCase()}
+                    >
                       Save
                     </Button>
                   ) : (
@@ -60,6 +203,14 @@ export default function TestCaseCreation({
                 </div>
               </div>
             ))}
+            <Button
+              variant="cyan"
+              className="!mb-4 font-semibold"
+              disabled={testCases.length >= 15}
+              onClick={() => addTestCase()}
+            >
+              + Add test case
+            </Button>
           </div>
         </ScrollArea>
       </div>
@@ -70,17 +221,39 @@ export default function TestCaseCreation({
               <div className="mb-3 flex justify-between">
                 <h3 className="text-lg font-bold">Input</h3>
                 <Button variant="outline" className="font-semibold">
-                  Upload File
+                  <label className="h-full w-full">
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept=".txt,.in"
+                      onChange={(e) => loadFile(e, "input")}
+                    />
+                    Upload Input File
+                  </label>
                 </Button>
               </div>
               <Textarea
                 id="test-case-input-textarea"
                 className="h-40 resize-none font-mono xl:h-[400px]"
+                placeholder="Place the input here"
                 defaultValue={testCases[currentTestCase]?.[0]}
               />
             </>
           ) : (
-            <div>asdf</div>
+            <>
+              <div className="mb-3 flex justify-between">
+                <h3 className="text-lg font-bold">Input</h3>
+                <Button variant="outline" className="font-semibold" disabled>
+                  Upload Input File
+                </Button>
+              </div>
+              <Textarea
+                id="test-case-input-textarea-disabled"
+                className="h-40 resize-none border-slate-500 font-mono dark:border-slate-600 xl:h-[400px]"
+                defaultValue={"Select a test case to edit its value"}
+                disabled
+              />
+            </>
           )}
         </div>
         <div className="col-span-12 p-4 xl:col-span-6">
@@ -89,17 +262,39 @@ export default function TestCaseCreation({
               <div className="mb-3 flex justify-between">
                 <h3 className="text-lg font-bold">Output</h3>
                 <Button variant="outline" className="font-semibold">
-                  Upload File
+                  <label className="h-full w-full">
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept=".txt,.out"
+                      onChange={(e) => loadFile(e, "output")}
+                    />
+                    Upload Output File
+                  </label>
                 </Button>
               </div>
               <Textarea
                 id="test-case-output-textarea"
                 className="h-40 resize-none font-mono xl:h-[400px]"
+                placeholder="Place the output here"
                 defaultValue={testCases[currentTestCase]?.[1]}
               />
             </>
           ) : (
-            <span>asdf</span>
+            <>
+              <div className="mb-3 flex justify-between">
+                <h3 className="text-lg font-bold">Output</h3>
+                <Button variant="outline" className="font-semibold" disabled>
+                  Upload Output File
+                </Button>
+              </div>
+              <Textarea
+                id="test-case-output-textarea-disabled"
+                className="h-40 resize-none border-slate-500 font-mono dark:border-slate-600 xl:h-[400px]"
+                defaultValue={"Select a test case to edit its value"}
+                disabled
+              />
+            </>
           )}
         </div>
       </div>

@@ -57,7 +57,6 @@ export default function CreateProblem() {
     ["12 input", "12 output"],
     ["13 input", "13 output"],
     ["14 input", "14 output"],
-    ["15 input", "15 output"],
   ] as string[][]);
 
   return (
