@@ -19,6 +19,9 @@ const TestCaseCreation = dynamic(
     ssr: false,
   }
 );
+const SolutionEditor = dynamic(() => import("~/components/solution-editor"), {
+  ssr: false,
+});
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await getServerAuthSession(ctx);
@@ -58,6 +61,7 @@ export default function CreateProblem() {
     ["13 input", "13 output"],
     ["14 input", "14 output"],
   ] as string[][]);
+  const [solution, setSolution] = useState("" as string);
 
   return (
     <>
@@ -70,7 +74,7 @@ export default function CreateProblem() {
         {formPosition === 1 && (
           <>
             <h1 className="mb-4 px-12 text-center text-4xl font-bold">
-              Step 1: Write your problem
+              Step 1: Create your problem
             </h1>
             <div className="mx-auto mb-12 w-full px-8 text-center text-slate-500 dark:text-slate-500 sm:w-5/6 md:w-3/4 lg:w-1/2">
               Use the markdown editor provided below to write out your problem.
@@ -110,7 +114,7 @@ export default function CreateProblem() {
         {formPosition === 2 && (
           <>
             <h1 className="mb-4 px-12 text-center text-4xl font-bold">
-              Step 2: Write your test cases
+              Step 2: Input your test cases
             </h1>
             <div className="mx-auto mb-12 w-full px-8 text-center text-slate-500 dark:text-slate-500 sm:w-5/6 md:w-3/4 lg:w-1/2">
               Enter up to fifteen test cases below. These are are the test cases
@@ -131,6 +135,43 @@ export default function CreateProblem() {
                 setTestCases={setTestCases}
               />
             </div>
+            <div className="mb-20 mt-12 flex justify-between px-4 text-right sm:px-8 md:px-12 lg:px-16 2xl:px-20">
+              <Button
+                className="font-semibold"
+                variant="secondary"
+                onClick={() => setFormPosition(1)}
+              >
+                Previous
+              </Button>
+              <Button
+                className="font-semibold"
+                variant="default"
+                onClick={() => setFormPosition(3)}
+              >
+                Next
+              </Button>
+            </div>
+          </>
+        )}
+        {formPosition === 3 && (
+          <>
+            <h1 className="mb-4 px-12 text-center text-4xl font-bold">
+              Step 3: Construct your solution
+            </h1>
+            <div className="mx-auto mb-12 w-full px-8 text-center text-slate-500 dark:text-slate-500 sm:w-5/6 md:w-3/4 lg:w-1/2">
+              Enter your solution below. You may choose to copy and paste your
+              solution into the editor or upload your solution using the
+              provided interface. Ensure that you have selected the correct
+              programming language before proceding to the next step. For more
+              information, refer to
+              <Link
+                href="#"
+                className="font-bold text-slate-600 transition duration-200 ease-in-out hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-600"
+              >
+                {" our guide."}
+              </Link>
+            </div>
+            <SolutionEditor solution={solution} setSolution={setSolution} />
             <div className="mb-20 mt-12 flex justify-between px-4 text-right sm:px-8 md:px-12 lg:px-16 2xl:px-20">
               <Button
                 className="font-semibold"

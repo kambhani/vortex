@@ -131,3 +131,11 @@ This is where you would describe the format of the expected input and output. Th
 code blocks
 \`\`\`
 to detail these is encouraged.`;
+
+// The list of languages that Vortex supports
+export const languages = {
+  "C++": {
+    monacoName: "cpp",
+    judge0Id: 54
+  }
+}

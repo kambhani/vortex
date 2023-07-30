@@ -221,7 +221,7 @@ export default function TestCaseCreation({
               <div className="mb-3 flex justify-between">
                 <h3 className="text-lg font-bold">Input</h3>
                 <Button variant="outline" className="font-semibold">
-                  <label className="h-full w-full">
+                  <label className="h-full w-full cursor-pointer">
                     <input
                       type="file"
                       className="hidden"
@@ -262,7 +262,7 @@ export default function TestCaseCreation({
               <div className="mb-3 flex justify-between">
                 <h3 className="text-lg font-bold">Output</h3>
                 <Button variant="outline" className="font-semibold">
-                  <label className="h-full w-full">
+                  <label className="h-full w-full cursor-pointer">
                     <input
                       type="file"
                       className="hidden"
