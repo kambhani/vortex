@@ -133,9 +133,15 @@ code blocks
 to detail these is encouraged.`;
 
 // The list of languages that Vortex supports
-export const languages = {
-  "C++": {
+export const languages = [
+  {
+    displayName: "C++",
+    judge0Id: 54,
     monacoName: "cpp",
-    judge0Id: 54
+  },
+  {
+    displayName: "Java",
+    judge0Id: 62,
+    monacoName: "java",
   }
-}
+]

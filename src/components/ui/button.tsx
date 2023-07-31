@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "~/utils/shadcn";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:border disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:border disabled:pointer-events-none disabled:opacity-50 font-semibold",
   {
     variants: {
       variant: {
@@ -17,9 +17,9 @@ const buttonVariants = cva(
           "bg-green-700 text-slate-50 shadow-sm hover:bg-green-700/90 dark:bg-green-900 dark:text-green-50 dark:hover:bg-green-900/90",
         cyan: "bg-cyan-600 text-slate-50 shadow-sm hover:bg-cyan-700/90 dark:bg-cyan-900 dark:text-cyan-50 dark:hover:bg-cyan-900/90 focus-visible:border-slate-800 dark:focus-visible:border-slate-200",
         orange:
-          "bg-orange-500 text-slate-800 shadow-sm hover:bg-orange-500/90 dark:bg-orange-900 dark:text-orange-50 dark:hover:bg-orange-900/90 focus-visible:border-slate-800 dark:focus-visible:border-slate-200 font-semibold",
+          "bg-orange-500 text-slate-800 shadow-sm hover:bg-orange-500/90 dark:bg-orange-900 dark:text-orange-50 dark:hover:bg-orange-900/90 focus-visible:border-slate-800 dark:focus-visible:border-slate-200",
         violet:
-          "bg-violet-600 text-slate-50 shadow-sm hover:bg-violet-600/90 dark:bg-violet-900 dark:text-violet-50 dark:hover:bg-violet-900/90 focus-visible:border-slate-800 dark:focus-visible:border-slate-200 font-semibold",
+          "bg-violet-600 text-slate-50 shadow-sm hover:bg-violet-600/90 dark:bg-violet-900 dark:text-violet-50 dark:hover:bg-violet-900/90 focus-visible:border-slate-800 dark:focus-visible:border-slate-200",
         outline:
           "border border-slate-200 bg-white shadow-sm hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50 focus-visible:border-slate-950 dark:focus-visible:border-white",
         secondary:
@@ -32,6 +32,7 @@ const buttonVariants = cva(
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
+        xl: "h-12 rounded-md px-12",
         icon: "h-10 w-10 rounded-full",
       },
     },

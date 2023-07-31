@@ -41,7 +41,7 @@ export default function MarkdownEditor({
           rehypePlugins: [[rehypeKatex, rehypeSanitize]],
           remarkPlugins: [[remarkMath]],
         }}
-        height={500}
+        height="85vh"
       />
     </div>
   );

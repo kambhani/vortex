@@ -157,7 +157,7 @@ export default function TestCaseCreation({
   return (
     <div className="grid w-full grid-cols-12 px-2 sm:px-4 md:px-8 lg:px-12 2xl:px-16">
       <div className="col-span-12 p-4 md:col-span-6 xl:col-span-4">
-        <ScrollArea className="md:h-[500px]">
+        <ScrollArea className="md:h-[85vh]">
           <div className="space-y-4">
             {testCases.map((_, index) => (
               <div

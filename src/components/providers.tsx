@@ -25,7 +25,7 @@ export default function Providers() {
     <div className="flex flex-col gap-y-4 px-2">
       {Object.entries(providers).map(([key, provider]) => (
         <button
-          className="inline-flex w-full items-center justify-center rounded-xl border border-slate-500 bg-white px-2 py-2 transition duration-200 ease-in-out hover:bg-slate-100 dark:border-slate-800 dark:bg-black dark:hover:bg-slate-950/70"
+          className="inline-flex w-full items-center justify-center rounded-xl border border-slate-500 px-2 py-2 font-semibold transition duration-200 ease-in hover:scale-[1.03] motion-reduce:hover:opacity-80 dark:border-slate-600"
           onClick={() => attemptLogin(provider.name.toLowerCase())}
           key={key}
         >
@@ -38,7 +38,7 @@ export default function Providers() {
             }
             alt={`${provider.name} Logo`}
           />
-          <span className="font-semibold text-slate-950 dark:text-white">
+          <span className="text-slate-950 dark:text-slate-50">
             Log in with {provider.name}
           </span>
         </button>

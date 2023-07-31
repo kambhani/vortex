@@ -32,7 +32,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="flex w-full shrink-0 grow-0 items-center justify-between bg-slate-100 px-2 py-4 text-slate-950 dark:bg-slate-950 dark:text-slate-50 sm:px-4">
+      <div className="flex w-full shrink-0 grow-0 items-center justify-between bg-slate-200 px-2 py-4 text-slate-950 dark:bg-slate-950 dark:text-slate-50 sm:px-4">
         <span className="inline-flex items-center md:hidden">
           <Sheet>
             <SheetTrigger asChild>

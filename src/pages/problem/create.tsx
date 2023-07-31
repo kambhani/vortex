@@ -61,7 +61,8 @@ export default function CreateProblem() {
     ["13 input", "13 output"],
     ["14 input", "14 output"],
   ] as string[][]);
-  const [solution, setSolution] = useState("" as string);
+  const [solution, setSolution] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("");
 
   return (
     <>
@@ -171,19 +172,24 @@ export default function CreateProblem() {
                 {" our guide."}
               </Link>
             </div>
-            <SolutionEditor solution={solution} setSolution={setSolution} />
+            <SolutionEditor
+              solution={solution}
+              setSolution={setSolution}
+              selectedLanguage={selectedLanguage}
+              setSelectedLanguage={setSelectedLanguage}
+            />
             <div className="mb-20 mt-12 flex justify-between px-4 text-right sm:px-8 md:px-12 lg:px-16 2xl:px-20">
               <Button
                 className="font-semibold"
                 variant="secondary"
-                onClick={() => setFormPosition(1)}
+                onClick={() => setFormPosition(2)}
               >
                 Previous
               </Button>
               <Button
                 className="font-semibold"
                 variant="default"
-                onClick={() => setFormPosition(3)}
+                onClick={() => setFormPosition(4)}
               >
                 Next
               </Button>

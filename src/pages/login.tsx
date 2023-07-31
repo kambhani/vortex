@@ -92,20 +92,21 @@ export default function Login() {
       </Head>
       <main className="my-16 flex h-full items-center justify-center align-middle">
         <div className="w-4/5 md:w-3/5 xl:w-1/2">
-          <Card className="bg-slate-200/50 dark:bg-slate-900">
+          <Card className="bg-gradient-to-bl from-slate-50 via-violet-200 to-slate-50 dark:from-slate-900 dark:via-violet-950 dark:to-slate-900">
             <CardHeader>
-              <CardTitle>Log In</CardTitle>
-              <CardDescription>
-                Select a provider below to log in
+              <CardTitle>Log In / Sign Up</CardTitle>
+              <CardDescription className="text-slate-600 dark:text-slate-400">
+                Select a provider below to log in. If you do not have an
+                account, one will be created for you.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Providers />
             </CardContent>
             <CardFooter>
-              <span className="text-sm text-slate-500 dark:text-slate-400">
-                By logging in, you are agreeing to Vortex&#39;s Terms of Service
-                and Privacy Policy.
+              <span className="text-sm text-slate-600 dark:text-slate-400">
+                By signing up and/or logging in, you are agreeing to
+                Vortex&#39;s Terms of Service and Privacy Policy.
               </span>
             </CardFooter>
           </Card>
