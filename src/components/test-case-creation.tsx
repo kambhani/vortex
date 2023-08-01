@@ -215,7 +215,7 @@ export default function TestCaseCreation({
         </ScrollArea>
       </div>
       <div className="col-span-12 grid grid-cols-12 md:col-span-6 xl:col-span-8">
-        <div className="col-span-12 p-4 xl:col-span-6">
+        <div className="col-span-12 p-4 xl:col-span-6 xl:mb-4 xl:flex xl:flex-col">
           {currentTestCase > -1 && currentTestCase < testCases.length ? (
             <>
               <div className="mb-3 flex justify-between">
@@ -232,12 +232,14 @@ export default function TestCaseCreation({
                   </label>
                 </Button>
               </div>
-              <Textarea
-                id="test-case-input-textarea"
-                className="h-40 resize-none font-mono xl:h-[400px]"
-                placeholder="Place the input here"
-                defaultValue={testCases[currentTestCase]?.[0]}
-              />
+              <div className="h-40 rounded-md bg-slate-300/70 dark:bg-slate-800/70 xl:grow">
+                <Textarea
+                  id="test-case-input-textarea"
+                  className="h-full resize-none font-mono"
+                  placeholder="Place the input here"
+                  defaultValue={testCases[currentTestCase]?.[0]}
+                />
+              </div>
             </>
           ) : (
             <>
@@ -247,16 +249,18 @@ export default function TestCaseCreation({
                   Upload Input File
                 </Button>
               </div>
-              <Textarea
-                id="test-case-input-textarea-disabled"
-                className="h-40 resize-none border-slate-500 font-mono dark:border-slate-600 xl:h-[400px]"
-                defaultValue={"Select a test case to edit its value"}
-                disabled
-              />
+              <div className="h-40 rounded-md bg-slate-300/70 dark:bg-slate-800/70 xl:grow">
+                <Textarea
+                  id="test-case-input-textarea-disabled"
+                  className="h-full resize-none border-slate-500 font-mono dark:border-slate-600"
+                  defaultValue={"Select a test case to edit its value"}
+                  disabled
+                />
+              </div>
             </>
           )}
         </div>
-        <div className="col-span-12 p-4 xl:col-span-6">
+        <div className="col-span-12 p-4 xl:col-span-6 xl:mb-4 xl:flex xl:flex-col">
           {currentTestCase > -1 ? (
             <>
               <div className="mb-3 flex justify-between">
@@ -273,12 +277,14 @@ export default function TestCaseCreation({
                   </label>
                 </Button>
               </div>
-              <Textarea
-                id="test-case-output-textarea"
-                className="h-40 resize-none font-mono xl:h-[400px]"
-                placeholder="Place the output here"
-                defaultValue={testCases[currentTestCase]?.[1]}
-              />
+              <div className="h-40 rounded-md bg-slate-300/70 dark:bg-slate-800/70 xl:grow">
+                <Textarea
+                  id="test-case-output-textarea"
+                  className="h-full resize-none font-mono"
+                  placeholder="Place the output here"
+                  defaultValue={testCases[currentTestCase]?.[1]}
+                />
+              </div>
             </>
           ) : (
             <>
@@ -288,12 +294,14 @@ export default function TestCaseCreation({
                   Upload Output File
                 </Button>
               </div>
-              <Textarea
-                id="test-case-output-textarea-disabled"
-                className="h-40 resize-none border-slate-500 font-mono dark:border-slate-600 xl:h-[400px]"
-                defaultValue={"Select a test case to edit its value"}
-                disabled
-              />
+              <div className="h-40 rounded-md bg-slate-300/70 dark:bg-slate-800/70 xl:grow">
+                <Textarea
+                  id="test-case-output-textarea-disabled"
+                  className="h-full resize-none border-slate-500 font-mono dark:border-slate-600"
+                  defaultValue={"Select a test case to edit its value"}
+                  disabled
+                />
+              </div>
             </>
           )}
         </div>

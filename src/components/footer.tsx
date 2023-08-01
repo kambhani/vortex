@@ -6,7 +6,10 @@ export default function Footer() {
   return (
     <>
       <Separator />
-      <div className="w-full shrink-0 bg-slate-100 px-2 py-3 text-slate-950 dark:bg-slate-950 dark:text-slate-200 sm:px-4">
+      <nav
+        className="w-full shrink-0 bg-slate-100 px-2 py-3 text-slate-950 dark:bg-slate-950 dark:text-slate-200 sm:px-4"
+        aria-label="footer"
+      >
         <div className="mx-auto mb-8 grid w-full grid-cols-12 gap-2 lg:w-3/4">
           {footerLinks.map((link) => (
             <Link
@@ -21,7 +24,7 @@ export default function Footer() {
         <p className="mb-4 text-center text-sm">
           &#169; {new Date().getFullYear()} Vortex Inc.
         </p>
-      </div>
+      </nav>
     </>
   );
 }

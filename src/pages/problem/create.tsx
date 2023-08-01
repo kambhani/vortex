@@ -77,18 +77,18 @@ export default function CreateProblem() {
             <h1 className="mb-4 px-12 text-center text-4xl font-bold">
               Step 1: Create your problem
             </h1>
-            <div className="mx-auto mb-12 w-full px-8 text-center text-slate-500 dark:text-slate-500 sm:w-5/6 md:w-3/4 lg:w-1/2">
+            <div className="mx-auto mb-12 w-full px-8 text-center text-slate-600 dark:text-slate-400 sm:w-5/6 md:w-3/4 lg:w-1/2">
               Use the markdown editor provided below to write out your problem.
               The editor supports GitHub-style markdown as well as mathmematical
               expressions through KaTeX, a LaTeX integration. For more
-              information, read
+              information, read&nbsp;
               <Link
                 href="#"
-                className="font-bold text-slate-600 transition duration-200 ease-in-out hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-600"
+                className="font-bold text-slate-600 underline transition duration-200 ease-in-out hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-600"
               >
-                {" our guide "}
+                our guide
               </Link>
-              on how to use the editor.
+              &nbsp;on how to use the editor.
             </div>
             <div onLoad={() => setEditorLoaded(true)}>
               <div
@@ -117,18 +117,18 @@ export default function CreateProblem() {
             <h1 className="mb-4 px-12 text-center text-4xl font-bold">
               Step 2: Input your test cases
             </h1>
-            <div className="mx-auto mb-12 w-full px-8 text-center text-slate-500 dark:text-slate-500 sm:w-5/6 md:w-3/4 lg:w-1/2">
+            <div className="mx-auto mb-12 w-full px-8 text-center text-slate-600 dark:text-slate-400 sm:w-5/6 md:w-3/4 lg:w-1/2">
               Enter up to fifteen test cases below. These are are the test cases
               that users&#39; code will be judged against. Each test case
               requires both an expected input and output. For more information,
-              read
+              read&nbsp;
               <Link
                 href="#"
-                className="font-bold text-slate-600 transition duration-200 ease-in-out hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-600"
+                className="font-bold text-slate-600 underline transition duration-200 ease-in-out hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-600"
               >
-                {" our guide "}
+                our guide
               </Link>
-              on how input test cases.
+              &nbsp;on how input test cases.
             </div>
             <div>
               <TestCaseCreation
@@ -159,17 +159,17 @@ export default function CreateProblem() {
             <h1 className="mb-4 px-12 text-center text-4xl font-bold">
               Step 3: Construct your solution
             </h1>
-            <div className="mx-auto mb-12 w-full px-8 text-center text-slate-500 dark:text-slate-500 sm:w-5/6 md:w-3/4 lg:w-1/2">
+            <div className="mx-auto mb-12 w-full px-8 text-center text-slate-600 dark:text-slate-400 sm:w-5/6 md:w-3/4 lg:w-1/2">
               Enter your solution below. You may choose to copy and paste your
               solution into the editor or upload your solution using the
               provided interface. Ensure that you have selected the correct
               programming language before proceding to the next step. For more
-              information, refer to
+              information, refer to&nbsp;
               <Link
                 href="#"
-                className="font-bold text-slate-600 transition duration-200 ease-in-out hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-600"
+                className="font-bold text-slate-600 underline transition duration-200 ease-in-out hover:text-sky-600 dark:text-slate-400 dark:hover:text-sky-600"
               >
-                {" our guide."}
+                our guide.
               </Link>
             </div>
             <SolutionEditor

@@ -1,7 +1,15 @@
 import Editor from "@monaco-editor/react";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import {
+  useState,
+  type Dispatch,
+  type SetStateAction,
+  type ChangeEvent,
+} from "react";
 import { useTheme } from "next-themes";
 import { Button } from "~/components/ui/button";
+import { Skeleton } from "~/components/ui/skeleton";
+import { useToast } from "~/components/ui/use-toast";
+import { ToastAction } from "~/components/ui/toast";
 import { CheckIcon, CaretSortIcon } from "@radix-ui/react-icons";
 import { cn } from "~/utils/shadcn";
 import { languages } from "~/utils/constants";
@@ -30,7 +38,46 @@ export default function SolutionEditor({
   setSelectedLanguage: Dispatch<SetStateAction<string>>;
 }) {
   const { resolvedTheme } = useTheme();
+  const { toast } = useToast();
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+
+  const loadFile = (event: ChangeEvent<HTMLInputElement>) => {
+    const readFileContent = (file: File) => {
+      const reader = new FileReader();
+      return new Promise((resolve, reject) => {
+        reader.onload = (event) => resolve(event.target?.result);
+        reader.onerror = (error) => reject(error);
+        reader.readAsText(file);
+      });
+    };
+    try {
+      const files = event.target.files;
+      if (files !== null && files.length > 0) {
+        const file = files[0];
+        if (typeof file !== "undefined") {
+          readFileContent(file)
+            .then((result) => {
+              setSolution(result as string);
+            })
+            .catch(() => {
+              throw new Error();
+            });
+        } else {
+          throw new Error();
+        }
+      } else {
+        throw new Error();
+      }
+    } catch {
+      toast({
+        variant: "destructive",
+        title: "File upload failed!",
+        description: `The file could not be uploaded for processing. Please try again.`,
+        action: <ToastAction altText="Ok">Ok</ToastAction>,
+      });
+    }
+    return;
+  };
 
   return (
     <div className="w-full px-2 sm:px-4 md:px-8 lg:px-12 2xl:px-16">
@@ -95,7 +142,7 @@ export default function SolutionEditor({
             <input
               type="file"
               className="hidden"
-              onChange={(e) => console.log(e)}
+              onChange={(e) => loadFile(e)}
             />
             Upload Solution File
           </label>
@@ -107,6 +154,9 @@ export default function SolutionEditor({
         language={selectedLanguage}
         value={solution}
         onChange={(value) => setSolution(value ?? "")}
+        loading={
+          <Skeleton className="h-full w-full border border-slate-800 dark:border-slate-300" />
+        }
       />
     </div>
   );
