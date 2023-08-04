@@ -15,12 +15,6 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -52,13 +46,16 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String       @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?      @unique
     emailVerified DateTime?
     image         String?
+    role          Role         @default(USER)
     accounts      Account[]
     sessions      Session[]
+    problems      Problem[]
+    submissions   Submission[]
 }
 
 model VerificationToken {
@@ -67,4 +64,74 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Problem {
+    id            Int          @id @default(autoincrement()) @db.UnsignedInt // Unique id of the problem
+    authorId      String // Unique id of the problem's author
+    created       DateTime     @default(now()) // Timestamp of when the problem was created
+    edited        DateTime     @updatedAt // Timestamp of when the problem was last edited
+    time          Int          @db.UnsignedSmallInt // Execution time given for users to solve the problem, in milliseconds
+    memory        Int          @db.UnsignedMediumInt // Memory given for users to solve the problem, in kilobytes
+    text          String       @db.Text // Problem text
+    testCases     TestCase[] // List of test cases for the problem
+    showTestCases Boolean // Whether the test cases should be displayed to the users upon attempting the problem
+    verified      Boolean      @default(false) // Whether the problem has been verified
+    published     Boolean      @default(false) // Whether the problem has been published
+    submissions   Submission[] // List of submissions for the problem
+    author        User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+    @@index([authorId])
+}
+
+model TestCase {
+    id        String  @id @default(cuid()) // Unique id of the test case
+    problemId Int     @db.UnsignedInt // Unique id of the test case's problem
+    input     String  @db.MediumText // Test case input
+    output    String  @db.MediumText // Test case output
+    problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+    @@index([problemId])
+}
+
+model Submission {
+    id        String     @id @default(cuid()) // Unique id of the submission
+    authorId  String // Unique id of the submission's author
+    problemId Int?       @db.UnsignedInt // Unique id of the submission's problem
+    code      String     @db.Text // Submitted code
+    language  Language // The programming language the code is in
+    tests     CodeExec[]
+    author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    problem   Problem?   @relation(fields: [problemId], references: [id], onDelete: SetNull)
+
+    @@index([authorId])
+    @@index([problemId])
+}
+
+// This model is basically the default Judge0 submission info
+model CodeExec {
+    id             String     @id // Unique id of the submission (which is the Judge0 token)
+    submissionId   String // Unique id of the result's submission
+    stdout         String?    @db.MediumText // Program output (can be rather long)
+    time           Int?       @db.UnsignedSmallInt // Time for program execution, in milliseconds
+    memory         Int?       @db.UnsignedMediumInt // Memory for program execution, in kilobytes
+    stderr         String?    @db.Text // Program output to standard error
+    compile_output String?    @db.Text // Compiler output
+    message        String? // Judge0 / Isolate status message
+    statusId       Int // Status code of the submission
+    Submission     Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+    @@index([submissionId])
+}
+
+enum Role {
+    USER
+    MOD
+    ADMIN
+    OWNER
+}
+
+enum Language {
+    CPP
+    JAVA
 }

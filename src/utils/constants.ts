@@ -145,3 +145,21 @@ export const languages = [
     monacoName: "java",
   }
 ]
+
+// The conversion from judge0 submission status code to status description
+export const judge0StatusCode = [
+  "In Queue",
+  "Processing",
+  "Accepted",
+  "Wrong Answer",
+  "Time Limit Exceeded",
+  "Compilation Error",
+  "Runtime Error (SIGSEGV)",
+  "Runtime Error (SIGXFSZ)",
+  "Runtime Error (SIGFPE)",
+  "Runtime Error (SIGABRT)",
+  "Runtime Error (NZEC)",
+  "Runtime Error (Other)",
+  "Internal Error",
+  "Exec Format Error"
+]
