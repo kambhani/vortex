@@ -163,3 +163,6 @@ export const judge0StatusCode = [
   "Internal Error",
   "Exec Format Error"
 ]
+
+// The number of problems a user is allowed to create
+export const maxUserProblems = 5;

@@ -69,6 +69,7 @@ model VerificationToken {
 model Problem {
     id            Int          @id @default(autoincrement()) @db.UnsignedInt // Unique id of the problem
     authorId      String // Unique id of the problem's author
+    title         String // The title of the problem
     created       DateTime     @default(now()) // Timestamp of when the problem was created
     edited        DateTime     @updatedAt // Timestamp of when the problem was last edited
     time          Int          @db.UnsignedSmallInt // Execution time given for users to solve the problem, in milliseconds
@@ -84,6 +85,7 @@ model Problem {
     @@index([authorId])
 }
 
+// This model stores a test case
 model TestCase {
     id        String  @id @default(cuid()) // Unique id of the test case
     problemId Int     @db.UnsignedInt // Unique id of the test case's problem
@@ -94,6 +96,7 @@ model TestCase {
     @@index([problemId])
 }
 
+// This model is how a submission is stored
 model Submission {
     id        String     @id @default(cuid()) // Unique id of the submission
     authorId  String // Unique id of the submission's author
