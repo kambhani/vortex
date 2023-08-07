@@ -6,6 +6,7 @@ import { Button } from "~/components/ui/button";
 import { useToast } from "~/components/ui/use-toast";
 import { ToastAction } from "~/components/ui/toast";
 import ProblemTable from "~/components/problem-table";
+import { hasAdminPermissions } from "~/utils/functions";
 
 export default function UserOverview() {
   const utils = api.useContext();
@@ -43,19 +44,22 @@ export default function UserOverview() {
     <>
       {user.data ? (
         <Tabs defaultValue="overview" className="mt-4 w-full px-4">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
-            <TabsTrigger value="overview" className="h-10">
+          <TabsList className="grid w-full grid-cols-2 sm:flex">
+            <TabsTrigger value="overview" className="h-10 sm:grow">
               Overview
             </TabsTrigger>
-            <TabsTrigger value="problems" className="h-10">
+            <TabsTrigger value="problems" className="h-10 sm:grow">
               Problems
             </TabsTrigger>
-            <TabsTrigger value="submissions" className="h-10">
+            <TabsTrigger value="submissions" className="h-10 sm:grow">
               Submissions
             </TabsTrigger>
-            <TabsTrigger value="settings" className="h-10">
-              Settings
-            </TabsTrigger>
+            {(session.data?.user.id === user.data.id ||
+              hasAdminPermissions(session.data?.user.id)) && (
+              <TabsTrigger value="settings" className="h-10 sm:grow">
+                Settings
+              </TabsTrigger>
+            )}
           </TabsList>
           <TabsContent value="overview">overview</TabsContent>
           <TabsContent value="problems" className="w-full">

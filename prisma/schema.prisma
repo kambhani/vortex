@@ -51,7 +51,7 @@ model User {
     email         String?      @unique
     emailVerified DateTime?
     image         String?
-    role          Role         @default(USER)
+    role          UserRole     @default(USER)
     accounts      Account[]
     sessions      Session[]
     problems      Problem[]
@@ -127,7 +127,7 @@ model CodeExec {
     @@index([submissionId])
 }
 
-enum Role {
+enum UserRole {
     USER
     MOD
     ADMIN

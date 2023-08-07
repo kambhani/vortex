@@ -11,6 +11,7 @@ import GitHubProvider from "next-auth/providers/github";
 import ZoomProvider from "next-auth/providers/zoom";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
+import { type UserRole } from "~/utils/constants";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -22,15 +23,15 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      role: UserRole;
       // ...other properties
-      // role: UserRole;
     } & DefaultSession["user"];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    role: UserRole;
+    //   ...other properties
+  }
 }
 
 /**
@@ -51,6 +52,7 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
+        role: user?.role,
       },
     }),
   },

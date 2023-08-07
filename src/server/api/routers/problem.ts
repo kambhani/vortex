@@ -6,6 +6,7 @@ import {
   publicProcedure
 } from "~/server/api/trpc";
 import { maxUserProblems, defaultProblemText } from "~/utils/constants";
+import { hasModPermissions } from "~/utils/functions";
 
 export const problemRouter = createTRPCRouter({
   createProblem: protectedProcedure
@@ -68,7 +69,7 @@ export const problemRouter = createTRPCRouter({
       return ctx.prisma.problem.findMany({
         where: {
           authorId: input.id,
-          ...(ctx.session?.user.id === input.id ? {} : { verified: true, published: true })
+          ...(ctx.session?.user.id === input.id || hasModPermissions(ctx.session?.user.role) ? {} : { verified: true, published: true })
         },
         select: {
           id: true,
