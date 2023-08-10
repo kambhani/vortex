@@ -25,12 +25,12 @@ export default function UserOverview() {
         title: "Problem creation failed",
         description: `Error ${err.data?.code || "INTERNAL_SERVER_ERROR"}: ${
           err.message
-        }`,
+        }.`,
         action: <ToastAction altText="I understand">I understand</ToastAction>,
       });
     },
-    onSuccess: (input) => {
-      void utils.problem.getUserProblems.invalidate({ id: input.authorId });
+    onSuccess: () => {
+      void utils.problem.invalidate();
       toast({
         variant: "success",
         title: "Problem creation succeeded",
@@ -64,7 +64,7 @@ export default function UserOverview() {
           <TabsContent value="overview">overview</TabsContent>
           <TabsContent value="problems" className="w-full">
             {session.data?.user.id === user.data.id && (
-              <div className="mt-8 w-full text-right">
+              <div className="ml-auto mt-8 flex w-44">
                 <Button
                   variant="success"
                   onClick={() => createProblemMutation.mutate()}
@@ -73,7 +73,7 @@ export default function UserOverview() {
                 </Button>
               </div>
             )}
-            <div className="mt-8">
+            <div className="mb-24 mt-8">
               <ProblemTable user={user.data.id} />
             </div>
           </TabsContent>

@@ -67,20 +67,20 @@ model VerificationToken {
 }
 
 model Problem {
-    id            Int          @id @default(autoincrement()) @db.UnsignedInt // Unique id of the problem
-    authorId      String // Unique id of the problem's author
-    title         String // The title of the problem
-    created       DateTime     @default(now()) // Timestamp of when the problem was created
-    edited        DateTime     @updatedAt // Timestamp of when the problem was last edited
-    time          Int          @db.UnsignedSmallInt // Execution time given for users to solve the problem, in milliseconds
-    memory        Int          @db.UnsignedMediumInt // Memory given for users to solve the problem, in kilobytes
-    text          String       @db.Text // Problem text
-    testCases     TestCase[] // List of test cases for the problem
-    showTestCases Boolean // Whether the test cases should be displayed to the users upon attempting the problem
-    verified      Boolean      @default(false) // Whether the problem has been verified
-    published     Boolean      @default(false) // Whether the problem has been published
-    submissions   Submission[] // List of submissions for the problem
-    author        User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    id              Int          @id @default(autoincrement()) @db.UnsignedInt // Unique id of the problem
+    authorId        String // Unique id of the problem's author
+    title           String // The title of the problem
+    created         DateTime     @default(now()) // Timestamp of when the problem was created
+    edited          DateTime     @updatedAt // Timestamp of when the problem was last edited
+    time            Int          @db.UnsignedSmallInt // Execution time given for users to solve the problem, in milliseconds
+    memory          Int          @db.UnsignedMediumInt // Memory given for users to solve the problem, in kilobytes
+    text            String       @db.Text // Problem text
+    testCases       TestCase[] // List of test cases for the problem
+    publicTestCases Boolean      @default(false) // Whether the test cases should be displayed to the users upon attempting the problem
+    verified        Boolean      @default(false) // Whether the problem has been verified
+    published       Boolean      @default(false) // Whether the problem has been published
+    submissions     Submission[] // List of submissions for the problem
+    author          User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
     @@index([authorId])
 }

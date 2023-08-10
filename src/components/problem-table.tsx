@@ -1,20 +1,35 @@
-import { type ColumnDef } from "@tanstack/react-table";
-import { useSession } from "next-auth/react";
+import { type ColumnDef, type Row } from "@tanstack/react-table";
 import { useToast } from "~/components/ui/use-toast";
 import { ToastAction } from "~/components/ui/toast";
 import { api } from "~/utils/api";
 import { useCallback } from "react";
 import { DataTable } from "~/components/ui/data-table";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { DataTableColumnHeader } from "~/components/ui/data-base-column-header";
+import {
+  CaretSortIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  CodeIcon,
+  CopyIcon,
+  DotsHorizontalIcon,
+  Link2Icon,
+  Pencil2Icon,
+  TableIcon,
+  TrashIcon,
+} from "@radix-ui/react-icons";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Button } from "~/components/ui/button";
+import { Parser } from "@json2csv/plainjs";
 
 type ProblemTableData = {
   id: number; // Problem id
@@ -25,7 +40,7 @@ type ProblemTableData = {
   time: number; // The time allotted for solving the problem, in milliseconds
   memory: number; // The memory allotted for solving the problem, in kilobytes
   testCaseCount: number; // The number of test cases for the problem
-  showTestCases: boolean; // Whether the test cases are shown to users solving the problem
+  publicTestCases: boolean; // Whether the test cases are shown to users solving the problem
   verified: boolean; // Whether the problem has been verified
   published: boolean; // Whether the problem has been published
   submissionCount: number; // The number of submissions for the problem
@@ -38,7 +53,7 @@ type DatabaseProblem = {
   edited: Date;
   time: number;
   memory: number;
-  showTestCases: boolean;
+  publicTestCases: boolean;
   verified: boolean;
   published: boolean;
   _count: {
@@ -50,95 +65,250 @@ type DatabaseProblem = {
   };
 };
 
-const columns: ColumnDef<ProblemTableData>[] = [
-  {
-    accessorKey: "id",
-    header: "ID",
-  },
-  {
-    accessorKey: "author",
-    header: "Author",
-  },
-  {
-    accessorKey: "title",
-    header: "Title",
-  },
-  {
-    accessorKey: "created",
-    header: "Created",
-    cell: ({ row }) => {
-      return <div>{new Date(row.getValue("created")).toLocaleString()}</div>;
-    },
-  },
-  {
-    accessorKey: "edited",
-    header: "Edited",
-    cell: ({ row }) => {
-      return <div>{new Date(row.getValue("edited")).toLocaleString()}</div>;
-    },
-  },
-  {
-    accessorKey: "time",
-    header: "Time (ms)",
-  },
-  {
-    accessorKey: "memory",
-    header: "Memory (kB)",
-  },
-  {
-    accessorKey: "testCaseCount",
-    header: "Test cases",
-  },
-  {
-    accessorKey: "showTestCases",
-    header: "Public test cases",
-    cell: ({ row }) => {
-      return <div>{row.getValue("showTestCases") ? "Yes" : "No"}</div>;
-    },
-  },
-  {
-    accessorKey: "verified",
-    header: "Verified",
-    cell: ({ row }) => {
-      return <div>{row.getValue("verified") ? "Yes" : "No"}</div>;
-    },
-  },
-  {
-    accessorKey: "published",
-    header: "Published",
-    cell: ({ row }) => {
-      return <div>{row.getValue("published") ? "Yes" : "No"}</div>;
-    },
-  },
-  {
-    accessorKey: "submissionCount",
-    header: "Submissions",
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      const problem = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <DotsHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
+const filterFn = (
+  row: Row<ProblemTableData>,
+  columnId: string,
+  filterValue: any
+): boolean => {
+  return (
+    row
+      .getValue(columnId)
+      ?.toLocaleString()
+      .toLocaleLowerCase()
+      .includes((filterValue as string).toLocaleLowerCase()) || false
+  );
+};
 
 export default function ProblemTable({ user }: { user: string }) {
-  const session = useSession();
+  const utils = api.useContext();
   const { toast } = useToast();
+
+  const columns: ColumnDef<ProblemTableData>[] = [
+    {
+      accessorKey: "id",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="ID" />
+      ),
+      cell: ({ row }) => {
+        return <div className="pl-2">{row.original.id.toLocaleString()}</div>;
+      },
+      filterFn: (row, columnId, filterValue) =>
+        filterFn(row, columnId, filterValue),
+    },
+    {
+      accessorKey: "author",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Author" />
+      ),
+      cell: ({ row }) => {
+        return <div className="pl-2">{row.original.author}</div>;
+      },
+      filterFn: (row, columnId, filterValue) =>
+        filterFn(row, columnId, filterValue),
+    },
+    {
+      accessorKey: "title",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Title" />
+      ),
+      cell: ({ row }) => {
+        return <div className="pl-2">{row.original.title}</div>;
+      },
+      filterFn: (row, columnId, filterValue) =>
+        filterFn(row, columnId, filterValue),
+    },
+    {
+      accessorKey: "created",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Created" />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="pl-2">{row.original.created.toLocaleString()}</div>
+        );
+      },
+      filterFn: (row, columnId, filterValue) =>
+        filterFn(row, columnId, filterValue),
+    },
+    {
+      accessorKey: "edited",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Edited" />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="pl-2">{row.original.edited.toLocaleString()}</div>
+        );
+      },
+      filterFn: (row, columnId, filterValue) =>
+        filterFn(row, columnId, filterValue),
+    },
+    {
+      accessorKey: "time",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Time" />
+      ),
+      cell: ({ row }) => {
+        return <div className="pl-2">{row.original.time.toLocaleString()}</div>;
+      },
+      filterFn: (row, columnId, filterValue) =>
+        filterFn(row, columnId, filterValue),
+    },
+    {
+      accessorKey: "memory",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Memory" />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="pl-2">{row.original.memory.toLocaleString()}</div>
+        );
+      },
+      filterFn: (row, columnId, filterValue) =>
+        filterFn(row, columnId, filterValue),
+    },
+    {
+      accessorKey: "testCaseCount",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Test cases" />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="pl-2">
+            {row.original.testCaseCount.toLocaleString()}
+          </div>
+        );
+      },
+      filterFn: (row, columnId, filterValue) =>
+        filterFn(row, columnId, filterValue),
+    },
+    {
+      accessorKey: "publicTestCases",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Public test cases" />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="pl-2">
+            {row.original.publicTestCases ? "Yes" : "No"}
+          </div>
+        );
+      },
+      filterFn: (row, columnId, filterValue) =>
+        filterFn(row, columnId, filterValue),
+    },
+    {
+      accessorKey: "verified",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Verified" />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="pl-2">{row.original.verified ? "Yes" : "No"}</div>
+        );
+      },
+      filterFn: (row, columnId, filterValue) =>
+        filterFn(row, columnId, filterValue),
+    },
+    {
+      accessorKey: "published",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Published" />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="pl-2">{row.original.published ? "Yes" : "No"}</div>
+        );
+      },
+      filterFn: (row, columnId, filterValue) =>
+        filterFn(row, columnId, filterValue),
+    },
+    {
+      accessorKey: "submissionCount",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Submissions" />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="pl-2">
+            {row.original.submissionCount.toLocaleString()}
+          </div>
+        );
+      },
+      filterFn: (row, columnId, filterValue) =>
+        filterFn(row, columnId, filterValue),
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        const problem = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <DotsHorizontalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Problem {problem.id}</DropdownMenuLabel>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <CopyIcon className="mr-2" />
+                  Copy
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuItem>
+                      <Link2Icon className="mr-2" />
+                      URL
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        copyText(
+                          JSON.stringify(row.original),
+                          "JSON copied successfully!",
+                          "Failed to copy JSON"
+                        )
+                      }
+                    >
+                      <CodeIcon className="mr-2" />
+                      JSON
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        copyText(
+                          new Parser({}).parse(row.original),
+                          "CSV copied successfully!",
+                          "Failed to copy CSV"
+                        )
+                      }
+                    >
+                      <TableIcon className="mr-2" />
+                      CSV
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
+              <DropdownMenuItem>
+                <Pencil2Icon className="mr-2" />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  deleteProblemMutation.mutate({ id: Number(problem.id) })
+                }
+              >
+                <TrashIcon className="mr-2" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
 
   const problems = api.problem.getUserProblems.useQuery(
     {
@@ -157,7 +327,7 @@ export default function ProblemTable({ user }: { user: string }) {
               time: problem.time,
               memory: problem.memory,
               testCaseCount: problem._count.testCases,
-              showTestCases: problem.showTestCases,
+              publicTestCases: problem.publicTestCases,
               verified: problem.verified,
               published: problem.published,
               submissionCount: problem._count.submissions,
@@ -176,6 +346,53 @@ export default function ProblemTable({ user }: { user: string }) {
       },
     }
   );
+
+  const deleteProblemMutation = api.problem.deleteProblem.useMutation({
+    onError: (err) => {
+      toast({
+        variant: "destructive",
+        title: "Problem deletion failed",
+        description: `Error ${err.data?.code || "INTERNAL_SERVER_ERROR"}: ${
+          err.message
+        }.`,
+        action: <ToastAction altText="I understand">I understand</ToastAction>,
+      });
+    },
+    onSuccess: () => {
+      void utils.problem.invalidate();
+      toast({
+        variant: "success",
+        title: "Problem deletion succeeded",
+        description: "The requested problem was successfully deleted.",
+        action: <ToastAction altText="OK">OK</ToastAction>,
+      });
+    },
+  });
+
+  const copyText = (
+    text: string,
+    successMessage: string,
+    failureMessage: string
+  ) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        toast({
+          variant: "success",
+          title: successMessage,
+          action: <ToastAction altText="OK">OK</ToastAction>,
+        });
+      })
+      .catch(() => {
+        toast({
+          variant: "destructive",
+          title: failureMessage,
+          action: (
+            <ToastAction altText="I understand">I understand</ToastAction>
+          ),
+        });
+      });
+  };
 
   return (
     <>

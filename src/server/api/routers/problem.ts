@@ -6,7 +6,7 @@ import {
   publicProcedure
 } from "~/server/api/trpc";
 import { maxUserProblems, defaultProblemText } from "~/utils/constants";
-import { hasModPermissions } from "~/utils/functions";
+import { hasAdminPermissions, hasModPermissions } from "~/utils/functions";
 
 export const problemRouter = createTRPCRouter({
   createProblem: protectedProcedure
@@ -51,14 +51,13 @@ export const problemRouter = createTRPCRouter({
           time: 1000,
           memory: 256000,
           text: defaultProblemText,
-          showTestCases: false,
+          publicTestCases: false,
           verified: false,
           published: false,
         }
       });
       
       return {
-        authorId: user.id,
         problemId: problem.id
       };
     }),
@@ -78,7 +77,7 @@ export const problemRouter = createTRPCRouter({
           edited: true,
           time: true,
           memory: true,
-          showTestCases: true,
+          publicTestCases: true,
           verified: true,
           published: true,
           _count: {
@@ -94,5 +93,37 @@ export const problemRouter = createTRPCRouter({
           },
         }
       })
+    }),
+
+  deleteProblem: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      // Get the author of the problem about to be deleted
+      const problemAuthor = await ctx.prisma.problem.findUniqueOrThrow({
+        where: {
+          id: input.id
+        },
+        select: {
+          authorId: true
+        }
+      })
+
+      // If the user requesting deletion is not the original author nor has admin permissions, throw an error
+      if (ctx.session.user.id !== problemAuthor.authorId && !hasAdminPermissions(ctx.session.user.role)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You do not have permission to delete the requested problem"
+        });  
+      }
+
+      await ctx.prisma.problem.delete({
+        where: {
+          id: input.id
+        }
+      })
+
+      return {
+        deleted: true
+      }
     })
 });
