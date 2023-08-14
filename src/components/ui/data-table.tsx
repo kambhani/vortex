@@ -13,8 +13,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { ChevronDownIcon } from "@radix-ui/react-icons";
-
 import {
   Table,
   TableBody,
@@ -23,13 +21,6 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { Button } from "~/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
 
 import { DataTablePagination } from "~/components/ui/data-table-pagination";
 import { DataTableViewOptions } from "~/components/ui/data-table-view-options";

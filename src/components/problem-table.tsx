@@ -4,11 +4,8 @@ import { ToastAction } from "~/components/ui/toast";
 import { api } from "~/utils/api";
 import { useCallback } from "react";
 import { DataTable } from "~/components/ui/data-table";
-import { DataTableColumnHeader } from "~/components/ui/data-base-column-header";
+import { DataTableColumnHeader } from "~/components/ui/data-table-column-header";
 import {
-  CaretSortIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
   CodeIcon,
   CopyIcon,
   DotsHorizontalIcon,
@@ -70,9 +67,14 @@ const filterFn = (
   columnId: string,
   filterValue: any
 ): boolean => {
+  const value =
+    typeof row.getValue(columnId) === "boolean"
+      ? row.getValue(columnId)
+        ? "yes"
+        : "no"
+      : row.getValue(columnId);
   return (
-    row
-      .getValue(columnId)
+    value
       ?.toLocaleString()
       .toLocaleLowerCase()
       .includes((filterValue as string).toLocaleLowerCase()) || false

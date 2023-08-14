@@ -53,13 +53,18 @@ export function DataTableColumnHeader<TData, TValue>({
           className="h-auto w-full justify-start px-2 text-left"
         >
           <span>{title}</span>
-          {column.getIsSorted() === "desc" ? (
-            <ArrowDownIcon className="mx-2 h-4 w-4 shrink-0" />
-          ) : column.getIsSorted() === "asc" ? (
-            <ArrowUpIcon className="mx-2 h-4 w-4 shrink-0" />
-          ) : (
-            <CaretSortIcon className="mx-2 h-4 w-4 shrink-0" />
-          )}
+          <div className="ml-2 flex h-full flex-col justify-around gap-y-2">
+            {column.getIsSorted() === "desc" ? (
+              <ArrowDownIcon className="h-4 w-4 shrink-0" />
+            ) : column.getIsSorted() === "asc" ? (
+              <ArrowUpIcon className="h-4 w-4 shrink-0" />
+            ) : (
+              <CaretSortIcon className="h-4 w-4 shrink-0" />
+            )}
+            {typeof column.getFilterValue() !== "undefined" && (
+              <ActivityLogIcon className="h-4 w-4 shrink-0" />
+            )}
+          </div>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-48 p-0">
