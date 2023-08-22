@@ -10,6 +10,7 @@ import {
   CopyIcon,
   DotsHorizontalIcon,
   Link2Icon,
+  OpenInNewWindowIcon,
   Pencil2Icon,
   TableIcon,
   TrashIcon,
@@ -26,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import { Parser } from "@json2csv/plainjs";
 
 type ProblemTableData = {
@@ -86,6 +88,32 @@ export default function ProblemTable({ user }: { user: string }) {
   const { toast } = useToast();
 
   const columns: ColumnDef<ProblemTableData>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <div className="!h-auto !w-full !justify-start !px-2 !text-left">
+          <Checkbox
+            className=""
+            checked={table.getIsAllPageRowsSelected()}
+            onCheckedChange={(value: boolean) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        </div>
+      ),
+      cell: ({ row }) => (
+        <div className="pl-2">
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value: boolean) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        </div>
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
     {
       accessorKey: "id",
       header: ({ column }) => (
@@ -262,7 +290,15 @@ export default function ProblemTable({ user }: { user: string }) {
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        copyText(
+                          `${window.origin}/problem/${row.original.id}`,
+                          "Link copied successfully!",
+                          "Failed to copy link"
+                        )
+                      }
+                    >
                       <Link2Icon className="mr-2" />
                       URL
                     </DropdownMenuItem>
@@ -293,9 +329,17 @@ export default function ProblemTable({ user }: { user: string }) {
                   </DropdownMenuSubContent>
                 </DropdownMenuPortal>
               </DropdownMenuSub>
-              <DropdownMenuItem>
-                <Pencil2Icon className="mr-2" />
-                Edit
+              <DropdownMenuItem asChild>
+                <a href={`/problem/${row.original.id}`} target="_blank">
+                  <OpenInNewWindowIcon className="mr-2" />
+                  Open
+                </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <a href={`/problem/${row.original.id}/edit`} target="_blank">
+                  <Pencil2Icon className="mr-2" />
+                  Edit
+                </a>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>

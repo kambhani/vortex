@@ -7,6 +7,7 @@ import {
 } from "~/server/api/trpc";
 import { maxUserProblems, defaultProblemText } from "~/utils/constants";
 import { hasAdminPermissions, hasModPermissions } from "~/utils/functions";
+import { prisma } from "~/server/db";
 
 export const problemRouter = createTRPCRouter({
   createProblem: protectedProcedure
@@ -94,6 +95,38 @@ export const problemRouter = createTRPCRouter({
         }
       })
     }),
+
+  getProblem: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      // Get the full problem from the database
+      const problem = await prisma.problem.findUnique({
+        where: {
+          id: input.id,
+        }
+      });
+
+      // If the problem does not exist, then throw an error
+      if (!problem) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Requested problem was not found"
+        });
+      }
+
+      // If the problem has not been published and the user does not have permission to view it, throw an error
+      if (!problem.published && ctx.session?.user.id !== problem.authorId && hasModPermissions(ctx.session?.user.role)) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You do not have permission to view the requested problem"
+        });
+      }
+
+      // Return the problem
+      return problem;
+    }),
+
+
 
   deleteProblem: protectedProcedure
     .input(z.object({ id: z.number() }))

@@ -1,7 +1,3 @@
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
-import "katex/dist/katex.css";
-
 import { useTheme } from "next-themes";
 import { useEffect, type Dispatch, type SetStateAction } from "react";
 import dynamic from "next/dynamic";
