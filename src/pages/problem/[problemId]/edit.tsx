@@ -4,11 +4,8 @@ import { getServerAuthSession } from "~/server/auth";
 import { useState } from "react";
 import FormProgressBar from "~/components/ui/form-progress-bar";
 import { Button } from "~/components/ui/button";
-import { Skeleton } from "~/components/ui/skeleton";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-
-import { defaultProblemText } from "~/utils/constants";
 
 const MarkdownEditor = dynamic(() => import("~/components/markdown-editor"), {
   ssr: false,
@@ -40,34 +37,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 };
 
-export default function CreateProblem() {
+export default function EditProblem() {
   const formSteps = 5;
   const [formPosition, setFormPosition] = useState(1);
-  const [problemText, setProblemText] = useState(defaultProblemText);
-  const [editorLoaded, setEditorLoaded] = useState(false);
-  const [testCases, setTestCases] = useState([
-    ["1 input", "1 output"],
-    ["2 input", "2 output"],
-    ["3 input", "3 output"],
-    ["4 input", "4 output"],
-    ["5 input", "5 output"],
-    ["6 input", "6 output"],
-    ["7 input", "7 output"],
-    ["8 input", "8 output"],
-    ["9 input", "9 output"],
-    ["10 input", "10 output"],
-    ["11 input", "11 output"],
-    ["12 input", "12 output"],
-    ["13 input", "13 output"],
-    ["14 input", "14 output"],
-  ] as string[][]);
   const [solution, setSolution] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("");
 
   return (
     <>
       <Head>
-        <title>Create a problem</title>
+        <title>Edit problem</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
@@ -90,18 +69,7 @@ export default function CreateProblem() {
               </Link>
               &nbsp;on how to use the editor.
             </div>
-            <div onLoad={() => setEditorLoaded(true)}>
-              <div
-                className={`h-[500px] w-full sm:px-4 md:px-8 lg:px-12 2xl:px-16 ${
-                  editorLoaded ? "hidden" : "block"
-                }`}
-              >
-                <Skeleton className="h-full w-full border border-slate-800 dark:border-slate-300" />
-              </div>
-              <div>
-                <MarkdownEditor />
-              </div>
-            </div>
+            <MarkdownEditor />
             <div className="mb-20 mt-8 px-2 text-right sm:px-4 md:px-8 lg:px-12 2xl:px-16">
               <Button
                 className="font-semibold"

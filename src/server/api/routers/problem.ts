@@ -6,14 +6,14 @@ import {
   publicProcedure
 } from "~/server/api/trpc";
 import { maxUserProblems, defaultProblemText } from "~/utils/constants";
-import { hasAdminPermissions, hasModPermissions } from "~/utils/functions";
+import { hasModPermissions } from "~/utils/functions";
 import { prisma } from "~/server/db";
 
 export const problemRouter = createTRPCRouter({
   createProblem: protectedProcedure
     .mutation(async ({ ctx }) => {
       // Get the user making the request
-      const user = await ctx.prisma.user.findUnique({
+      const user = await ctx.prisma.user.findUniqueOrThrow({
         where: {
           id: ctx.session.user.id
         },
@@ -25,15 +25,6 @@ export const problemRouter = createTRPCRouter({
           }
         }
       });
-
-      // If the user does not exist, return an error
-      // This is a fail-safe and should never happen as all users should exist in the database
-      if (!user) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "User does not exist"
-        });
-      }
       
 
       // If the user has already made the maximum number of problems, prevent them from making another
@@ -115,7 +106,7 @@ export const problemRouter = createTRPCRouter({
       }
 
       // If the problem has not been published and the user does not have permission to view it, throw an error
-      if (!problem.published && ctx.session?.user.id !== problem.authorId && hasModPermissions(ctx.session?.user.role)) {
+      if (!problem.published && ctx.session?.user.id !== problem.authorId && !hasModPermissions(ctx.session?.user.role)) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "You do not have permission to view the requested problem"
@@ -126,6 +117,78 @@ export const problemRouter = createTRPCRouter({
       return problem;
     }),
 
+  getProblemText: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      // Get the relevant problem information from the database
+      const problem = await prisma.problem.findUnique({
+        select: {
+          authorId: true,
+          text: true,
+          published: true,
+        },
+        where: {
+          id: input.id,
+        }
+      });
+
+      // If the problem does not exist, then throw an error
+      if (!problem) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Requested problem was not found"
+        });
+      }
+
+      // If the problem has not been published and the user does not have permission to view it, throw an error
+      if (!problem.published && ctx.session?.user.id !== problem.authorId && !hasModPermissions(ctx.session?.user.role)) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You do not have permission to view the requested problem"
+        });
+      }
+
+      // Return the problem text
+      return {
+        text: problem.text
+      }
+    }),
+
+  setProblemText: protectedProcedure
+    .input(z.object({ id: z.number(), text: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const problemAuthor = await prisma.problem.findUniqueOrThrow({
+        select: {
+          authorId: true
+        },
+        where: {
+          id: input.id
+        }
+      });
+
+      // If the user does not have permission to edit the problem, throw an error
+      if (ctx.session.user.id !== problemAuthor.authorId && !hasModPermissions(ctx.session.user.role)) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You do not have permission to edit the requested problem"
+        });
+      }
+
+      // Update the problem text
+      await prisma.problem.update({
+        where: {
+          id: input.id
+        },
+        data: {
+          text: input.text
+        }
+      });
+
+      // Return a successful message
+      return {
+        success: true
+      }
+    }),
 
 
   deleteProblem: protectedProcedure
@@ -142,11 +205,11 @@ export const problemRouter = createTRPCRouter({
       })
 
       // If the user requesting deletion is not the original author nor has admin permissions, throw an error
-      if (ctx.session.user.id !== problemAuthor.authorId && !hasAdminPermissions(ctx.session.user.role)) {
+      if (ctx.session.user.id !== problemAuthor.authorId && !hasModPermissions(ctx.session.user.role)) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You do not have permission to delete the requested problem"
-        });  
+        });
       }
 
       await ctx.prisma.problem.delete({
@@ -158,5 +221,6 @@ export const problemRouter = createTRPCRouter({
       return {
         deleted: true
       }
-    })
+    }),
+
 });

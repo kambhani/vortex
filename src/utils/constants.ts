@@ -167,6 +167,9 @@ export const judge0StatusCode = [
 // The number of problems a user is allowed to create
 export const maxUserProblems = 5;
 
+// The number of test cases each problem can have
+export const maxTestCases = 15;
+
 // The possible user roles
 export enum UserRole {
   USER = "USER",

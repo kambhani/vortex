@@ -6,7 +6,6 @@ import rehypeSanitize from "rehype-sanitize";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import { api } from "~/utils/api";
-//import MarkdownPreview from "@uiw/react-markdown-preview";
 
 const MarkdownPreview = dynamic(() => import("@uiw/react-markdown-preview"), {
   ssr: false,
